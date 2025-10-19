@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RNA Isolation Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 3rem auto;
+      background: #f5fbff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 { text-align: center; color: #003d52; }
+    label, input { display: block; width: 100%; margin-bottom: 1rem; }
+    input[type="number"] { padding: 0.5rem; font-size: 1rem; }
+    button {
+      background: #007b99;
+      color: white;
+      border: none;
+      padding: 0.7rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      width: 100%;
+    }
+    button:hover { background: #005f73; }
+    .result { margin-top: 2rem; font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+  <h1>RNA Isolation Calculator</h1>
+  <label for="sampleVolume">Sample Volume (mL):</label>
+  <input type="number" id="sampleVolume" placeholder="Enter sample volume" step="0.01" />
+
+  <button onclick="calculate()">Calculate Reagents</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculate() {
+      const sample = parseFloat(document.getElementById('sampleVolume').value);
+      if (isNaN(sample) || sample <= 0) {
+        document.getElementById('result').innerHTML = "<p>Please enter a valid volume.</p>";
+        return;
+      }
+
+      const trizol = sample * 3; // 0.75 mL per 0.25 mL sample
+      const chloroform = trizol * 0.2;
+      const isopropanol = trizol * 0.5;
+      const ethanol = trizol * 1;
+
+      document.getElementById('result').innerHTML = `
+        <h3>Reagent Volumes (mL):</h3>
+        <ul>
+          <li><strong>TRIzol:</strong> ${trizol.toFixed(2)} mL</li>
+          <li><strong>Chloroform:</strong> ${chloroform.toFixed(2)} mL</li>
+          <li><strong>Isopropanol:</strong> ${isopropanol.toFixed(2)} mL</li>
+          <li><strong>75% Ethanol:</strong> ${ethanol.toFixed(2)} mL</li>
+        </ul>
+      `;
+    }
+  </script>
+</body>
+</html>
