@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RNA Isolation Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    input, select, button {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: var(--input-bg);
+    }
+    button {
+      background: var(--highlight);
+      color: var(--text);
+      border: none;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: var(--accent);
+      color: white;
+    }
+    .result {
+      margin-top: 2rem;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>RNA Isolation Calculator</header>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="rna.html">RNA Calculator</a>
+    <a href="pcr.html">PCR Calculator</a>
+    <a href="manuals.html">Manuals</a>
+  </nav>
+
+  <main>
+    <label for="sampleVolume">Sample Volume:</label>
+    <input type="number" id="sampleVolume" placeholder="Enter sample volume" step="0.01">
+
+    <label for="unitSelect">Units:</label>
+    <select id="unitSelect">
+      <option value="mL">mL</option>
+      <option value="µL">µL</option>
+    </select>
+
+    <button onclick="calculate()">Calculate Reagents</button>
+
+    <div class="result" id="result"></div>
+  </main>
+
+  <footer>© 2025 Arnold Swartz</footer>
+
+  <script>
+    function calculate() {
+      let sample = parseFloat(document.getElementById('sampleVolume').value);
+      const unit = document.getElementById('unitSelect').value;
+
+      if (isNaN(sample) || sample <= 0) {
+        document.getElementById('result').innerHTML = "<p>Please enter a valid sample volume.</p>";
+        return;
+      }
+
+      if (unit === 'µL') sample /= 1000; // convert to mL internally
+
+      const trizol = sample * 3;
+      const chloroform = trizol * 0.2;
+      const isopropanol = trizol * 0.5;
+      const ethanol = trizol * 1;
+
+      const conversion = unit === 'µL' ? 1000 : 1;
+      const u = unit;
+
+      document.getElementById('result').innerHTML = `
+        <h3>Reagent Volumes (${u}):</h3>
+        <ul>
+          <li><strong>TRIzol:</strong> ${(trizol * conversion).toFixed(2)} ${u}</li>
+          <li><strong>Chloroform:</strong> ${(chloroform * conversion).toFixed(2)} ${u}</li>
+          <li><strong>Isopropanol:</strong> ${(isopropanol * conversion).toFixed(2)} ${u}</li>
+          <li><strong>75% Ethanol:</strong> ${(ethanol * conversion).toFixed(2)} ${u}</li>
+        </ul>
+      `;
+    }
+  </script>
+</body>
+</html>
